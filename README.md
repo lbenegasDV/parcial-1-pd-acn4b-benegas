@@ -93,6 +93,7 @@ taskflow/
   ├─ ui.js       # Renderizado dinámico y eventos DOM
   ├─ api.js      # API externa y categorías
   └─ utils.js    # Funciones auxiliares y helpers
+├─ run.html
 ```
 ---
 
@@ -106,27 +107,48 @@ taskflow/
 ### Clonar el repositorio
 
 ```bash
-git clone [https://github.com/tu_usuario/taskflow.git](https://github.com/tu_usuario/taskflow.git) # Reemplazar con el enlace correcto
+git clone https://github.com/lbenegasDV/parcial-1-pd-acn4b-benegas.git 
 cd taskflow
 ```
+---
+
+###  Ejecutar el servidor local (evitar error CORS)
+
+El proyecto utiliza módulos **ES6** (`import/export`), que requieren ejecutarse sobre un **servidor local**.  
+Para simplificar esto se incluye el archivo **`run.bat`** en la raíz del proyecto.
 
 ---
 
-### Requisitos previos
+#### 🔹 Opción 1 — Usando el archivo `run.bat` (recomendada)
 
-* Para evitar bloqueos de CORS en módulos ES6, la aplicación debe ejecutarse con un servidor local. Puedes usar http-server (incluido en Node.js mediante npx):
+1. Hacer doble clic sobre **`run.bat`**.  
+2. Se abrirá una consola con el mensaje:
+Iniciando TaskFlow en http://localhost:8080
+---
 
+3. Abrir el navegador y acceder a:  
+👉 [http://localhost:8080](http://localhost:8080)
 
-### Clonar el repositorio
+*(El archivo ejecuta internamente `npx http-server . -p 8080` para levantar el servidor local.)*
+
+---
+
+#### 🔹 Opción 2 — Manual (desde consola)
+
+Si preferís ejecutarlo directamente desde la terminal:
 
 ```bash
-npx http-server .
+npx http-server . -p 8080
 ```
-
-Por defecto, la aplicación estará disponible en:
-
-👉 http://127.0.0.1:8080
 ---
+###  Visualizar la aplicación
+
+Una vez levantado el servidor, ingresar en el navegador a:
+
+👉 [http://localhost:8080](http://localhost:8080)
+
+Desde allí podés interactuar con la aplicación, agregar tareas, editarlas y verificar la persistencia en `localStorage`.
+
 ## 🧩 Uso básico
 
 1.  **Ingresar** al formulario “Nueva tarea”.
