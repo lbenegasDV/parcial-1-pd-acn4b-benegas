@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskFlow · Gestor de Tareas</title>
+
+  <!-- Bootstrap CSS & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="#">
+        <i class="bi bi-check2-circle me-2"></i>TaskFlow
+      </a>
+      <div class="ms-auto small text-body-secondary d-none d-md-block" id="quoteBox">
+        <i class="bi bi-chat-quote"></i> <span>Inspirate cargando la página…</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="row g-4">
+      <!-- Columna izquierda: alta de tareas -->
+      <div class="col-12 col-lg-4">
+        <div class="card shadow-sm">
+          <div class="card-header d-flex align-items-center">
+            <i class="bi bi-plus-circle me-2"></i>
+            <span class="fw-semibold">Nueva tarea</span>
+          </div>
+          <div class="card-body">
+            <form id="new-task-form" autocomplete="off">
+              <div class="mb-3">
+                <label for="taskTitle" class="form-label">Título</label>
+                <input type="text" class="form-control" id="taskTitle" placeholder="Ej: Entregar parcial" required>
+              </div>
+              <div class="mb-3">
+                <label for="taskCategory" class="form-label">Categoría</label>
+                <select id="taskCategory" class="form-select">
+                  <!-- Se completa por JS -->
+                </select>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-plus-lg me-1"></i>Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer small text-body-secondary">
+            Guardado local con <code>localStorage</code>. Sin backend.
+          </div>
+        </div>
+
+        <div class="card mt-4 shadow-sm">
+          <div class="card-body d-flex flex-wrap gap-2 align-items-center">
+            <span class="fw-semibold me-2">Resumen:</span>
+            <span class="badge text-bg-secondary" id="badgeTotal">0 total</span>
+            <span class="badge text-bg-warning" id="badgePending">0 pendientes</span>
+            <span class="badge text-bg-success" id="badgeDone">0 hechas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: lista / filtros / búsqueda -->
+      <div class="col-12 col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+              <ul class="nav nav-pills" id="filterNav">
+                <li class="nav-item"><button class="nav-link active" data-filter="all">Todas</button></li>
+                <li class="nav-item"><button class="nav-link" data-filter="pending">Pendientes</button></li>
+                <li class="nav-item"><button class="nav-link" data-filter="done">Hechas</button></li>
+              </ul>
+              <div class="ms-md-auto d-flex gap-2 align-items-center w-100 w-md-auto">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input id="searchInput" type="search" class="form-control" placeholder="Buscar… (título)">
+                </div>
+                <select id="pageSize" class="form-select" style="max-width: 110px;">
+                  <option value="5" selected>5 pág.</option>
+                  <option value="10">10 pág.</option>
+                  <option value="20">20 pág.</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-group list-group-flush" id="taskList" aria-live="polite">
+            <!-- Items por JS -->
+          </div>
+
+          <div class="card-footer d-flex justify-content-center">
+            <nav aria-label="Paginación">
+              <ul class="pagination mb-0" id="pagination">
+                <!-- Paginación por JS -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Editar tarea -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="editForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar tarea</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editId">
+          <div class="mb-3">
+            <label for="editTitle" class="form-label">Título</label>
+            <input type="text" class="form-control" id="editTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="editCategory" class="form-label">Categoría</label>
+            <select id="editCategory" class="form-select"></select>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="editDone">
+            <label class="form-check-label" for="editDone">
+              Marcar como hecha
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+  <!-- Bootstrap JS (bundle) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- App (ES Modules) -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

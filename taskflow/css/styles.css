@@ -1,0 +1,31 @@
+/* Tipografía del sistema para que se vea moderno en todos lados */
+:root {
+  --tf-accent: #4f46e5; /* acento */
+}
+body {
+  font-feature-settings: "liga","kern";
+}
+
+/* Tarjetas/lista un poquito más suaves */
+.card { border-radius: 1rem; }
+.card-header { border-top-left-radius: 1rem; border-top-right-radius: 1rem; }
+.list-group-item { padding: .9rem 1rem; }
+
+/* Título tachado al completar */
+.task-title.done {
+  text-decoration: line-through;
+  opacity: .6;
+}
+
+/* Botón de acción compacto */
+.btn-icon {
+  width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: .65rem;
+}
+
+/* Chips categoría */
+.badge-cat {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
